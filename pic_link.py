@@ -61,6 +61,22 @@ def link_pics():
     img = img.point(lambda i : i * 1.5)
     img.save('new_image.jpg')
 
+#第二种算法,这里会发生内存溢出的错误，可能运算量太大
+def link_pics2():
+    iW_size = W_num * W_size
+    iH_size = H_num * H_size
+    I = numpy.array(transfer(bigPhoto, iW_size, iH_size)) * 1.0
+
+    for i in range(W_num):
+        for j in range(H_num):
+            s = random.choice(aval)
+            res = I[ j*H_size:(j+1)*H_size, i*W_size:(i+1)*W_size] * numpy.array(transfer(s, W_size, H_size))/255
+            I[ j*H_size:(j+1)*H_size, i*W_size:(i+1)*W_size] = res
+
+    img = Image.fromarray(I.astype(numpy.uint8))
+    img = img.point(lambda i : i * 1.5)
+    img.save("createNevImg_past.jpg")
+
 if __name__ == '__main__':
     getAllPhotos()
     link_pics()
